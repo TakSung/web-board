@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, redirect, url_for,request
 from datetime import datetime
 
 app = Flask(__name__)
@@ -20,7 +20,16 @@ posts = [
 
 @app.route('/')
 def index():
-    return render_template('index.html', posts=posts)
+    return redirect(url_for("get_post_list"))
+
+@app.route('/post/<int:post_id>', methods=['GET'])
+def get_post_detail(post_id):
+    post = posts[post_id]
+    return render_template('post_detail.html', post=post)
+
+@app.route('/post', methods=['GET'])
+def get_post_list():
+    return render_template('post_list.html', posts=posts)
 
 @app.route('/post', methods=['POST'])
 def create_post():
@@ -30,7 +39,7 @@ def create_post():
     post_id = len(posts) + 1
     new_post = Post(post_id, title, content, user_id)
     posts.append(new_post)
-    return render_template('index.html', posts=posts)
+    return redirect(url_for("index"))
 
 if __name__ == '__main__':
     app.run(debug=True)

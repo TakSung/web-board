@@ -15,10 +15,11 @@
         <ul class="list-group mb-4">
             {% for post in posts %}
             <li class="list-group-item">
-                <h5 class="mb-1">{{ post.title }}</h5>
-                <p class="mb-1">작성자: <strong>{{ post.user_id }}</strong></p>
-                <p class="mb-1">작성 시간: {{ post.create_time }}</p>
-                <p>{{ post.content }}</p>
+                <a herf="/post/{{ post.post_id }}">
+                    <h5 class="mb-1">{{ post.post_id }}) {{ post.title }}</h5>
+                    <p class="mb-1">작성자: <strong>{{ post.user_id }}</strong></p>
+                    <p class="mb-1">작성 시간: {{ post.create_time }}</p>
+                </a>
             </li>
             {% endfor %}
         </ul>
