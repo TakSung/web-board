@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+</head>
+<body>
+    <h1>게시물 목록</h1>
+    <ul id="posts"></ul>
+
+    <form id="postForm">
+        <input type="text" id="title" placeholder="제목"><br>
+        <textarea id="content" placeholder="내용"></textarea><br>
+        <input type="text" id="user_id" placeholder="사용자 ID"><br>
+        <button type="submit">게시물 작성</button>
+    </form>
+
+    <script>
+        async function loadPosts() {
+            const response = await fetch('/api/posts');
+            const posts = await response.json();
+            const postsList = document.getElementById('posts');
+            postsList.innerHTML = '';
+            posts.forEach(post => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${post.title}</strong><br>
+                                작성자: ${post.user_id}<br>
+                                작성 시간: ${post.create_time}<br>
+                                내용: ${post.content}`;
+                postsList.appendChild(li);
+            });
+        }
+
+        document.getElementById('postForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const user_id = document.getElementById('user_id').value;
+
+            await fetch('/api/post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, content, user_id }),
+            });
+
+            loadPosts();  // 새 게시물을 로드합니다.
+        });
+
+        // 페이지가 로드될 때 게시물 목록을 불러옵니다.
+        window.onload = loadPosts;
+    </script>
+</body>
+</html>
