@@ -5,8 +5,8 @@ It is a project to build a shopping mall backend using python.
 ## Downlode Code
 
 ```bash
-git clone https://github.com//Backend.git
-cd Backend
+git clone https://github.com/TakSung/web-board.git
+cd web-board
 pip install -r requirements.txt
 ```
 
