@@ -1,21 +1,43 @@
 from flask import Flask, render_template, redirect, url_for,request
 from datetime import datetime
+from dataclasses import dataclass
 
 app = Flask(__name__)
 
+# class Post:
+#     def __init__(self, post_id, title, content, user_id):
+#         self.post_id = post_id
+#         self.title = title
+#         self.content = content
+#         self.create_time = datetime.now()
+#         self.update_time = datetime.now()
+#         self.user_id = user_id
+
+@dataclass
 class Post:
-    def __init__(self, post_id, title, content, user_id):
-        self.post_id = post_id
-        self.title = title
-        self.content = content
-        self.create_time = datetime.now()
-        self.update_time = datetime.now()
-        self.user_id = user_id
+    id:int
+    title:str
+    content:str
+    user_id:str
+    create_time:datetime = datetime.now()
+    update_time:datetime = datetime.now()
+    
+@dataclass
+class User:
+    id:int
+    account:str
+    name:str
+    pw:str
 
 # 샘플 데이터
 posts = [
-    Post(1, "첫 번째 게시물", "이것은 첫 번째 게시물입니다.", 1),
-    Post(2, "두 번째 게시물", "이것은 두 번째 게시물입니다.", 2)
+    Post(id=1, title="첫 번째 게시물", content="이것은 첫 번째 게시물입니다.", user_id=1),
+    Post(id=2, title="두 번째 게시물", content="이것은 두 번째 게시물입니다.", user_id=2),
+]
+
+users = [
+    User(id=1, account="test1", name="이탁균", pw="123"),
+    User(id=2, account="test2", name="정우성", pw="456")
 ]
 
 @app.route('/')
