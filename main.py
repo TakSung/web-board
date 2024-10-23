@@ -49,11 +49,15 @@ def get_post_detail(post_id):
     post = posts[post_id]
     return render_template('post_detail.html', post=post)
 
+@app.route('/post/create', methods=['GET'])
+def get_post_create():
+    return render_template('post_create.html')
+
 @app.route('/post', methods=['GET'])
 def get_post_list():
     return render_template('post_list.html', posts=posts)
 
-@app.route('/post', methods=['POST'])
+@app.route('/post/create', methods=['POST'])
 def create_post():
     title = request.form['title']
     content = request.form['content']
