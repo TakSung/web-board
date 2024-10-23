@@ -20,6 +20,20 @@
                 <p>{{ post.content }}</p>
             </li>
         </ul>
+        <h2 class="mb-3">게시물 작성</h2>
+        <form action="/post/edit" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">제목</label>
+                <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요" required>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea name="content" class="form-control" id="content" rows="4" placeholder="내용을 입력하세요" required></textarea>
+            </div>
+            <input type="text" name="user_id" value="{{ post.user_id }}" readonly/>
+            <input type="hidden" name="postId" id="postId" value="{{post.id}}"></input>        
+            <button type="submit" class="btn btn-primary">게시물 수정</button>
+        </form>
     </div>
 
     <!-- Bootstrap JS and Popper.js -->
