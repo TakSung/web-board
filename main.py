@@ -59,11 +59,27 @@ def get_post_list():
 
 @app.route('/post/create', methods=['POST'])
 def create_post():
+    print(request)
+    print(request.form)
     title = request.form['title']
     content = request.form['content']
     user_id = request.form['user_id']
     post_id = len(posts) + 1
     new_post = Post(post_id, title, content, user_id)
+    posts.append(new_post)
+    return redirect(url_for("index"))
+
+@app.route('/post/edit', methods=['POST'])
+def edit_post():
+    print(request)
+    print(request.form)
+    title = request.form['title']
+    content = request.form['content']   
+    id = request.form['postId']
+    print(id, title,content)
+    post_id = len(posts) + 1
+    user_id = request.form['user_id']
+    new_post = Post(post_id, title, content,user_id)
     posts.append(new_post)
     return redirect(url_for("index"))
 

@@ -40,5 +40,9 @@ def create_post():
     posts.append(new_post)
     return jsonify({'message': 'Post created successfully'}), 201
 
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
