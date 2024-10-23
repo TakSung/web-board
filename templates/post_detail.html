@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 상세보기</title>
+    <title>게시글 상세보기 및 수정</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container my-5">
+        <!-- 게시글 상세보기 -->
         <h2 class="border-bottom pb-2 mb-4 text-primary">{{ post.title }}</h2>
-
-        <!-- 게시글 내용 -->
         <div class="card mb-3 border-primary">
             <div class="card-body">
-                <div class="card-text" style="white-space: pre-line; font-size: 1.1rem; line-height: 1.6;">
+                <div class="card-text" style="white-space: pre-line;">
                     {{ post.content }}
                 </div>
             </div>
+            <div class="d-flex justify-content-end mt-3">
+                <span class="badge bg-primary text-light me-2">작성자<{{ post.user_id }}></span>
+                <span class="badge bg-primary text-light">{{ post.create_time.strftime('%Y/%m/%d') }}</span>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+                <span class="badge bg-primary text-light">수정 시간: {{ post.update_time.strftime('%Y/%m/%d') }}</span>
+            </div>
         </div>
 
-        <!-- 작성자 및 시간 정보 -->
-        <div class="d-flex justify-content-end mt-3">
-            <span class="badge bg-primary text-light me-2">{{ post.user_id }}</span>
-            <span class="badge bg-primary text-light">{{ post.create_time.strftime('%Y/%m/%d') }}</span>
-        </div>
-
-        <div class="d-flex justify-content-end mt-2">
-            <span class="badge bg-primary text-light">수정 시간: {{ post.update_time.strftime('%Y/%m/%d') }}</span>
-        </div>
-
+        <!-- 게시물 수정 폼 -->
+        <h2 class="mb-4 text-primary">게시물 수정</h2>
+        <form action="/post/edit" method="POST" class="border p-4 rounded">
+            <div class="mb-3">
+                <label for="title" class="form-label">제목</label>
+                <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요" required value="{{ post.title }}">
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea name="content" class="form-control" id="content" rows="6" placeholder="내용을 입력하세요" required>{{ post.content }}</textarea>
+            </div>
+            <input type="hidden" name="user_id" class="form-control" id="user_id" value="{{ post.user_id }}" readonly>
+            <input type="hidden" name="postId" id="postId" value="{{ post.id }}">
+            <button type="submit" class="btn btn-primary w-100">게시물 수정</button>
+        </form>
     </div>
 
     <!-- Bootstrap JS and Popper.js -->
