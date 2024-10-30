@@ -49,8 +49,8 @@ posts = {
 }
 
 users = {
-    User(id=1, account="test1", name="정우성", pw="123"),
-    User(id=2, account="test2", name="이탁균", pw="456")
+    1: User(id=1, account="test1", name="정우성", pw="123"),
+    2: User(id=2, account="test2", name="이탁균", pw="456"),
 }
 
 comments = {
