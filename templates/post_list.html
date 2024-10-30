@@ -19,6 +19,7 @@
                 <th>제목</th>
                 <th>작성자</th>
                 <th>작성일시</th>
+                <th>삭제</th>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +31,15 @@
                 </td>
                 <td>{{ post.user_id }}</td>
                 <td>{{ post.create_time }}</td>
+                <td>
+                    <form action="" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');">
+                            <span class="text-danger">
+                                <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px;">
+                            </span>
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
             </tbody>
