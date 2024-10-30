@@ -23,16 +23,16 @@
             </tr>
             </thead>
             <tbody>
-            {% for post in posts %}
+            {% for post in posts.values() %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>
-                    <a href="{{ url_for('get_post_detail', post_id=post.id-1) }}">{{ post.title }}</a>
+                    <a href="{{ url_for('get_post_detail', post_id=post.id) }}">{{ post.title }}</a>
                 </td>
                 <td>{{ post.user_id }}</td>
                 <td>{{ post.create_time }}</td>
                 <td>
-                    <form action="" method="POST" style="display:inline;">
+                    <form action="/post/delete/{{post.id}}" method="GET" style="display:inline;">
                         <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');">
                             <span class="text-danger">
                                 <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px;">
