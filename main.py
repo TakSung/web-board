@@ -40,17 +40,31 @@ class Comment:
 
 # 샘플 데이터
 posts = {
-    1:Post(id=1, title="첫 번째 게시물", content="이것은 첫 번째 게시물입니다.", user_id=1),
-    2:Post(id=2, title="두 번째 게시물", content="이것은 두 번째 게시물입니다.", user_id=2),
+    1: Post(id=1, title="첫 번째 게시물", content="이것은 첫 번째 게시물입니다.", user_id=1),
+    2: Post(id=2, title="두 번째 게시물", content="이것은 두 번째 게시물입니다.", user_id=2),
+    3: Post(id=3, title="세 번째 게시물", content="이것은 세 번째 게시물입니다.", user_id=3),
+    4: Post(id=4, title="네 번째 게시물", content="이것은 네 번째 게시물입니다.", user_id=4),
+    5: Post(id=5, title="다섯 번째 게시물", content="이것은 다섯 번째 게시물입니다.", user_id=5),
+    6: Post(id=6, title="여섯 번째 게시물", content="이것은 여섯 번째 게시물입니다.", user_id=6),
 }
 
-users = [
-    User(id=1, account="test1", name="이탁균", pw="123"),
-    User(id=2, account="test2", name="정우성", pw="456")
-]
+users = {
+    User(id=1, account="test1", name="정우성", pw="123"),
+    User(id=2, account="test2", name="이탁균", pw="456")
+}
+
+comments = {
+    1: Comment(id=1, post_id=1, content="오 대박 첫글에 첫번째 댓글 남기고 갑니다.",    user_id=2),
+    2: Comment(id=2, post_id=1, content="대박이라니... 틀딱 냄새남",                user_id=1),
+    3: Comment(id=3, post_id=1, content="... 그래면 요즘은 뭐라고 하는데?",          user_id=2),
+    4: Comment(id=4, post_id=1, content="안 안려줄건데?",                         user_id=1),
+    5: Comment(id=5, post_id=2, content="틀딱 글에 댓글 남기고 감",                 user_id=1),
+    6: Comment(id=6, post_id=2, content="... 발 닦고 잠이나 자라",                 user_id=2),
+}
 
 post_num = len(posts)
 user_num = len(users)
+comment_num = len(comments)
 
 @app.route('/')
 def index():

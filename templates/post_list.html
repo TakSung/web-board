@@ -31,11 +31,11 @@
                 </td>
                 <td>{{ post.user_id }}</td>
                 <td>{{ post.create_time }}</td>
-                <td>
+                <td class="text-center align-middle" style="width: 50px;">
                     <form action="/post/delete/{{post.id}}" method="GET" style="display:inline;">
                         <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');">
                             <span class="text-danger">
-                                <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px;">
+                                <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 70%; height: 70%; object-fit: cover;">
                             </span>
                         </button>
                     </form>
