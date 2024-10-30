@@ -28,6 +28,15 @@ class User:
     account:str
     name:str
     pw:str
+    
+@dataclass
+class Comment:
+    id:int
+    post_id:int
+    content:str
+    user_id:str
+    create_time:datetime = datetime.now()
+    update_time:datetime = datetime.now()
 
 # 샘플 데이터
 posts = [
