@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for,request
 from datetime import datetime
 from dataclasses import dataclass
+import typing
 
 app = Flask(__name__)
 
@@ -34,9 +35,18 @@ class Comment:
     id:int
     post_id:int
     content:str
-    user_id:str
+    user_id:int
     create_time:datetime = datetime.now()
     update_time:datetime = datetime.now()
+    
+@dataclass
+class CommentDto:
+    id:int
+    post_id:int
+    content:str
+    user:str
+    create_time:datetime
+    update_time:datetime
 
 # 샘플 데이터
 posts = {
@@ -71,9 +81,11 @@ def index():
     return redirect(url_for("get_post_list"))
 
 @app.route('/post/<int:post_id>', methods=['GET'])
-def get_post_detail(post_id):
+def get_post_detail(post_id:int):
     post = posts[post_id]
-    return render_template('post_detail.html', post=post)
+    new_comment = get_comment_list(post_id)
+    return render_template('post_detail.html', post=post, comments=new_comment)
+
 
 @app.route('/post/create', methods=['GET'])
 def get_post_create():
@@ -115,7 +127,30 @@ def delete_post(post_id):
     del posts[post_id]
     return redirect(url_for("index"))
 
+def get_comment_list(post_id:int)-> typing.List[CommentDto]:
+    return convert_to_comment_dto(comments)
+    # 아래를 구현하시오
+    comment_list:CommentDto = []
+    for comment in comments.values():
+        if comment.post_id == post_id:
+            ...
+    return comment_list
 
+def get_user(user_id:int) -> User:
+    return users[user_id]
+
+def convert_to_comment_dto(comments: typing.List[Comment])-> typing.List[CommentDto]:
+    comment_list: typing.List[CommentDto] = []
+    for comment in comments:
+        comment_list.append(CommentDto(
+                id=comment.id,
+                post_id=comment.post_id,
+                content=comment.content,
+                user=comment.user_id,
+                create_time=comment.create_time,
+                update_time=comment.update_time,
+            ))
+    return comment_list
 
 if __name__ == '__main__':
     app.run(debug=True)
