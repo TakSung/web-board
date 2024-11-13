@@ -128,21 +128,19 @@ def delete_post(post_id):
     return redirect(url_for("index"))
 
 def get_comment_list(post_id:int)-> typing.List[CommentDto]:
-    return convert_to_comment_dto(comments)
+    # return convert_to_comment_dto(comments)
     # 아래를 구현하시오
     comment_list:CommentDto = []
     for comment in comments.values():
         if comment.post_id == post_id:
-            ...
+            comment_list.append(comment)
     return comment_list
 
 def get_user(user_id:int) -> User:
     return users[user_id]
 
 def convert_to_comment_dto(comments: typing.List[Comment])-> typing.List[CommentDto]:
-    comment_list: typing.List[CommentDto] = []
-    for comment in comments.values():
-        comment_list.append(CommentDto(
+    
                 id=comment.id,
                 post_id=comment.post_id,
                 content=comment.content,
