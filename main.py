@@ -125,11 +125,11 @@ def edit_post():
     print(request.form)
     title = request.form['title']
     content = request.form['content']   
-    id = request.form['postId']
-    print(id, title,content)
+    post_id:int = int(request.form['postId'])
+    print(post_id, title,content)
     user_id = request.form['user_id']
-    new_post = Post(int(id), title, content,user_id)
-    posts[int(id)] = new_post
+    new_post = Post(post_id, title, content,user_id)
+    posts[post_id] = new_post
     return redirect(url_for("index"))
 
 @app.route('/post/delete/<int:post_id>', methods=['GET'])
@@ -138,10 +138,13 @@ def delete_post(post_id):
     return redirect(url_for("index"))
 
 def get_comment_list(post_id:int)-> typing.List[CommentDto]:
-    comment_list:CommentDto = []
-    for comment in comments.values():
-        if comment.post_id == post_id:
-            new_comment:CommentDto = CommentDto(
+    return [convert_to_comment_dto(comment) for comment in comments.values() if comment.post_id == post_id]
+
+def get_user(user_id:int) -> User:
+    return users[user_id]
+
+def convert_to_comment_dto(comment: Comment)-> CommentDto:
+    return CommentDto(
                 id=comment.id,
                 post_id=comment.post_id,
                 content=comment.content,
@@ -149,24 +152,6 @@ def get_comment_list(post_id:int)-> typing.List[CommentDto]:
                 create_time=comment.create_time,
                 update_time=comment.update_time,
             )
-            comment_list.append(new_comment)
-    return comment_list
-
-def get_user(user_id:int) -> User:
-    return users[user_id]
-
-def convert_to_comment_dto(comments: typing.List[Comment])-> typing.List[CommentDto]:
-    comment_list: typing.List[CommentDto] = []
-    for comment in comments:
-        comment_list.append(CommentDto(
-                id=comment.id,
-                post_id=comment.post_id,
-                content=comment.content,
-                user=comment.user_id,
-                create_time=comment.create_time,
-                update_time=comment.update_time,
-            ))
-    return comment_list
 
 if __name__ == '__main__':
     app.run(debug=True)
