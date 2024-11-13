@@ -1,6 +1,9 @@
 from flask import Flask, render_template, redirect, url_for,request
 from datetime import datetime
 from dataclasses import dataclass
+from math import ceil
+from copy import copy
+import typing
 
 app = Flask(__name__)
 
@@ -28,7 +31,7 @@ class User:
     account:str
     name:str
     pw:str
-    
+
 @dataclass
 class Comment:
     id:int
@@ -37,6 +40,15 @@ class Comment:
     user_id:str
     create_time:datetime = datetime.now()
     update_time:datetime = datetime.now()
+    
+@dataclass
+class CommentDto:
+    id:int
+    post_id:int
+    content:str
+    user:str
+    create_time:datetime
+    update_time:datetime
 
 # 샘플 데이터
 posts = {
@@ -68,20 +80,30 @@ comment_num = len(comments)
 
 @app.route('/')
 def index():
-    return redirect(url_for("get_post_list"))
+    return redirect(url_for("get_post_list", page=1))
 
 @app.route('/post/<int:post_id>', methods=['GET'])
-def get_post_detail(post_id):
+def get_post_detail(post_id:int):
     post = posts[post_id]
-    return render_template('post_detail.html', post=post)
+    new_comment = get_comment_list(post_id)
+    return render_template('post_detail.html', post=post, comments=new_comment)
 
 @app.route('/post/create', methods=['GET'])
 def get_post_create():
     return render_template('post_create.html')
 
-@app.route('/post', methods=['GET'])
-def get_post_list():
-    return render_template('post_list.html', posts=posts)
+@app.route('/post/list/<int:page>', methods=['GET'])
+def get_post_list(page:int): # page 1~end
+    size = 2
+    max_page = ceil(len(posts) / size)
+    page = min(max_page, max(page-1,0))
+    start_idx = page * size
+    end_idx = min(start_idx+size,  len(posts))
+    new_posts = list(posts.values())[start_idx:end_idx]
+    if len(new_posts) == 0:
+        return redirect(url_for("get_post_list", page=page))
+    else :
+        return render_template('post_list.html', posts=new_posts, page=page+1)
 
 @app.route('/post/create', methods=['POST'])
 def create_post():
@@ -115,7 +137,36 @@ def delete_post(post_id):
     del posts[post_id]
     return redirect(url_for("index"))
 
+def get_comment_list(post_id:int)-> typing.List[CommentDto]:
+    comment_list:CommentDto = []
+    for comment in comments.values():
+        if comment.post_id == post_id:
+            new_comment:CommentDto = CommentDto(
+                id=comment.id,
+                post_id=comment.post_id,
+                content=comment.content,
+                user=get_user(comment.user_id).name,
+                create_time=comment.create_time,
+                update_time=comment.update_time,
+            )
+            comment_list.append(new_comment)
+    return comment_list
 
+def get_user(user_id:int) -> User:
+    return users[user_id]
+
+def convert_to_comment_dto(comments: typing.List[Comment])-> typing.List[CommentDto]:
+    comment_list: typing.List[CommentDto] = []
+    for comment in comments:
+        comment_list.append(CommentDto(
+                id=comment.id,
+                post_id=comment.post_id,
+                content=comment.content,
+                user=comment.user_id,
+                create_time=comment.create_time,
+                update_time=comment.update_time,
+            ))
+    return comment_list
 
 if __name__ == '__main__':
     app.run(debug=True)
