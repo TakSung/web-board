@@ -133,22 +133,21 @@ def get_comment_list(post_id:int)-> typing.List[CommentDto]:
     comment_list:CommentDto = []
     for comment in comments.values():
         if comment.post_id == post_id:
-            comment_list.append(comment)
+            comment_list.append(convert_to_comment_dto(comment))
     return comment_list
 
 def get_user(user_id:int) -> User:
     return users[user_id]
 
-def convert_to_comment_dto(comments: typing.List[Comment])-> typing.List[CommentDto]:
-    
+def convert_to_comment_dto(comment: Comment)-> CommentDto:
+    return CommentDto(
                 id=comment.id,
                 post_id=comment.post_id,
                 content=comment.content,
-                user=comment.user_id,
+                user=get_user(comment.user_id).name,
                 create_time=comment.create_time,
                 update_time=comment.update_time,
-            ))
-    return comment_list
+            )
 
 if __name__ == '__main__':
     app.run(debug=True)
