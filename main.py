@@ -141,7 +141,7 @@ def get_user(user_id:int) -> User:
 
 def convert_to_comment_dto(comments: typing.List[Comment])-> typing.List[CommentDto]:
     comment_list: typing.List[CommentDto] = []
-    for comment in comments:
+    for comment in comments.values():
         comment_list.append(CommentDto(
                 id=comment.id,
                 post_id=comment.post_id,
