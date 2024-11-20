@@ -37,7 +37,7 @@ class Comment:
     id:int
     post_id:int
     content:str
-    user_id:str
+    user_id:int
     create_time:datetime = datetime.now()
     update_time:datetime = datetime.now()
     
@@ -87,6 +87,11 @@ def get_post_detail(post_id:int):
     post = posts[post_id]
     new_comment = get_comment_list(post_id)
     return render_template('post_detail.html', post=post, comments=new_comment)
+
+@app.route('/post/edit/<int:post_id>', methods=['GET'])
+def get_post_edit(post_id:int):
+    post = posts[post_id]
+    return render_template('post_edit.html', post=post)
 
 @app.route('/post/create', methods=['GET'])
 def get_post_create():
@@ -138,7 +143,13 @@ def delete_post(post_id):
     return redirect(url_for("index"))
 
 def get_comment_list(post_id:int)-> typing.List[CommentDto]:
-    return [convert_to_comment_dto(comment) for comment in comments.values() if comment.post_id == post_id]
+    # return convert_to_comment_dto(comments)
+    # 아래를 구현하시오
+    comment_list:CommentDto = []
+    for comment in comments.values():
+        if comment.post_id == post_id:
+            comment_list.append(convert_to_comment_dto(comment))
+    return comment_list
 
 def get_user(user_id:int) -> User:
     return users[user_id]
