@@ -86,6 +86,10 @@ def get_post_detail(post_id:int):
     new_comment = get_comment_list(post_id)
     return render_template('post_detail.html', post=post, comments=new_comment)
 
+@app.route('/post/edit/<int:post_id>', methods=['GET'])
+def get_post_edit(post_id:int):
+    post = posts[post_id]
+    return render_template('post_edit.html', post=post)
 
 @app.route('/post/create', methods=['GET'])
 def get_post_create():

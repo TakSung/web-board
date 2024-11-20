@@ -26,33 +26,48 @@
             </div>
         </div>
 
+        <a href="" class="btn btn-primary">게시글 수정하기</a>
+
         <!-- 댓글 목록 -->
         <h3 class="mt-5 mb-4 text-primary">댓글</h3>
         <div class="list-group mb-4">
         {% for comment in comments %}
             <div class="list-group-item">
+                <!-- 댓글 내용 -->
                 <p class="mb-1">{{ comment.content }}</p>
-                <small class="text-muted">
-                    작성자: {{ comment.user }} | 작성일: {{ comment.create_time.strftime('%Y/%m/%d') }}
-                </small>
+                
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <!-- 작성자 정보 및 삭제 버튼 -->
+                    <div class="d-flex justify-content-between w-100">
+                        <small class="text-muted">
+                            작성자: {{ comment.user }} | 작성일: {{ comment.create_time.strftime('%Y/%m/%d') }}
+                        </small>
+                
+                        <!-- 삭제 버튼 -->
+                        <form action="" method="GET" style="display:inline;">
+                            <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');">
+                                <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px; object-fit: cover;">
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         {% endfor %}
 
     </div>
-        <!-- 게시물 수정 폼 -->
-        <h2 class="mb-4 text-primary">게시물 수정</h2>
-        <form action="/post/edit" method="POST" class="border p-4 rounded">
+        <!-- 댓글 작성 폼 -->
+        <h2 class="mb-4 text-primary">댓글 작성</h2>
+        <form action="" method="POST" class="border p-4 rounded">
             <div class="mb-3">
-                <label for="title" class="form-label">제목</label>
-                <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요" required value="{{ post.title }}">
+                <label for="commentContent" class="form-label">댓글</label>
+                <textarea name="commentContent" class="form-control" id="commentContent" rows="6" placeholder="댓글을 입력하세요" required></textarea>
             </div>
             <div class="mb-3">
-                <label for="content" class="form-label">내용</label>
-                <textarea name="content" class="form-control" id="content" rows="6" placeholder="내용을 입력하세요" required>{{ post.content }}</textarea>
+                <label for="userId" class="form-label">유저ID</label>
+                <input type="text" name="userId" class="form-control" id="userId" placeholder="유저을 입력하세요. ex)1" required>
             </div>
-            <input type="hidden" name="user_id" class="form-control" id="user_id" value="{{ post.user_id }}" readonly>
             <input type="hidden" name="postId" id="postId" value="{{ post.id }}">
-            <button type="submit" class="btn btn-primary w-100">게시물 수정</button>
+            <button type="submit" class="btn btn-primary w-100">댓글 작성</button>
         </form>
 
     <!-- Bootstrap JS and Popper.js -->
