@@ -23,13 +23,13 @@
             </tr>
             </thead>
             <tbody>
-            {% for post in posts.values() %}
+            {% for post in posts %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>
                     <a href="{{ url_for('get_post_detail', post_id=post.id) }}">{{ post.title }}</a>
                 </td>
-                <td>{{ post.user_id }}</td>
+                <td>{{ post.user_name }}</td>
                 <td>{{ post.create_time }}</td>
                 <td class="text-center align-middle" style="width: 50px;">
                     <form action="/post/delete/{{post.id}}" method="GET" style="display:inline;">
