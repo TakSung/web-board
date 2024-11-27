@@ -53,7 +53,7 @@
     </div>
         <!-- 댓글 작성 폼 -->
         <h2 class="mb-4 text-primary">댓글 작성</h2>
-        <form action="" method="POST" class="border p-4 rounded">
+        <form action="{{url_for('create_comment')}}" method="POST" class="border p-4 rounded">
             <div class="mb-3">
                 <label for="commentContent" class="form-label">댓글</label>
                 <textarea name="commentContent" class="form-control" id="commentContent" rows="6" placeholder="댓글을 입력하세요" required></textarea>

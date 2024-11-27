@@ -13,7 +13,7 @@ class Post:
     title:str
     content:str
     user_id:int
-    user_name:str = ""
+    user_name:str=""
     create_time:datetime = datetime.now()
     update_time:datetime = datetime.now()
     
@@ -54,13 +54,11 @@ posts = {
 
 users = {
     1: User(id=1, account="test1", name="정우성", pw="123"),
-    2: User(id=2, account="test2", name="이탁균", pw="456"),
-    3: User(id=3, account="test3", name="김상철", pw="234"),
-    4: User(id=4, account="test4", name="류교자", pw="567"),
-    5: User(id=5, account="test5", name="정상우", pw="789"),
-    6: User(id=6, account="test6", name="김박사", pw="135"),
-    7: User(id=7, account="test7", name="우울지", pw="246"),
-    8: User(id=8, account="test8", name="사악한", pw="357"),
+    2: User(id=2, account="test1", name="이탁균", pw="123"),
+    3: User(id=3, account="test1", name="김철수", pw="123"),
+    4: User(id=4, account="test1", name="김영희", pw="123"),
+    5: User(id=5, account="test2", name="김대청", pw="456"),
+    6: User(id=6, account="test2", name="김대치", pw="456"),
 }
 
 comments = {
@@ -76,6 +74,26 @@ post_num = len(posts)
 user_num = len(users)
 comment_num = len(comments)
 
+@app.route('/comment/create', methods=['POST'])
+def create_comment():
+    global comment_num
+    print(request)
+    print(request.form)
+    content = request.form['commentContent']
+    user_id = request.form['userId']
+    post_id = request.form['postId']
+    comment_num += 1
+    comment_id = comment_num
+    new_comment = Comment(
+        id = comment_id,
+        post_id = int(post_id),
+        content = content,
+        user_id = int(user_id)
+    )
+    comments[comment_id] = new_comment
+    print(comments)
+    return redirect(url_for("index"))
+
 @app.route('/')
 def index():
     return redirect(url_for("get_post_list", page=1))
@@ -85,6 +103,7 @@ def get_post_detail(post_id:int):
     post = posts[post_id]
     post.user_name = get_user(post.user_id).account
     new_comment = get_comment_list(post_id)
+    post.user_name = get_user(post.user_id).name
     return render_template('post_detail.html', post=post, comments=new_comment)
 
 @app.route('/post/edit/<int:post_id>', methods=['GET'])
@@ -162,6 +181,6 @@ def convert_to_comment_dto(comment: Comment)-> CommentDto:
                 create_time=comment.create_time,
                 update_time=comment.update_time,
             )
-
+    
 if __name__ == '__main__':
     app.run(debug=True)
