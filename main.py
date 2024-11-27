@@ -80,7 +80,7 @@ def create_comment():
     print(request)
     print(request.form)
     content = request.form['commentContent']
-    user_id = request.form['userId']
+    user_id = int(request.form['userId'])
     post_id = request.form['postId']
     comment_num += 1
     comment_id = comment_num
@@ -88,7 +88,7 @@ def create_comment():
         id = comment_id,
         post_id = int(post_id),
         content = content,
-        user_id = int(user_id)
+        user_id = user_id
     )
     comments[comment_id] = new_comment
     print(comments)
@@ -135,7 +135,7 @@ def create_post():
     print(request.form)
     title = request.form['title']
     content = request.form['content']
-    user_id = request.form['user_id']
+    user_id = int(request.form['user_id'])
     post_num += 1
     post_id = post_num
     new_post = Post(post_id, title, content, user_id)
@@ -150,7 +150,7 @@ def edit_post():
     content = request.form['content']   
     post_id:int = int(request.form['postId'])
     print(post_id, title,content)
-    user_id = request.form['user_id']
+    user_id = int(request.form['user_id'])
     new_post = Post(post_id, title, content,user_id)
     posts[post_id] = new_post
     return redirect(url_for("get_post_detail", post_id=post_id))
