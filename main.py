@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for,request
 from datetime import datetime
 from dataclasses import dataclass
+from copy import deepcopy
 import typing
 
 app = Flask(__name__)
@@ -23,6 +24,8 @@ class Post:
     user_name:str=""
     create_time:datetime = datetime.now()
     update_time:datetime = datetime.now()
+    def deepcopy(self):
+        return deepcopy(self)
     
 @dataclass
 class User:
@@ -109,7 +112,7 @@ def index():
 def get_post_detail(post_id:int):
     post = posts[post_id]
     new_comment = get_comment_list(post_id)
-    post.user_name = get_user(int(post.user_id)).name
+    post = get_post_adding_user_name(post)
     return render_template('post_detail.html', post=post, comments=new_comment)
 
 @app.route('/post/edit/<int:post_id>', methods=['GET'])
@@ -123,7 +126,9 @@ def get_post_create():
 
 @app.route('/post', methods=['GET'])
 def get_post_list():
-    return render_template('post_list.html', posts=posts)
+    post_list = posts.values()
+    converted_posts = [get_post_adding_user_name(post) for post in post_list]
+    return render_template('post_list.html', posts=converted_posts)
 
 @app.route('/post/create', methods=['POST'])
 def create_post():
@@ -160,7 +165,7 @@ def delete_post(post_id):
 def get_comment_list(post_id:int)-> typing.List[CommentDto]:
     # return convert_to_comment_dto(comments)
     # 아래를 구현하시오
-    comment_list:CommentDto = []
+    comment_list:type.List[CommentDto] = []
     for comment in comments.values():
         if comment.post_id == post_id:
             comment_list.append(convert_to_comment_dto(comment))
@@ -178,8 +183,11 @@ def convert_to_comment_dto(comment: Comment)-> CommentDto:
                 create_time=comment.create_time,
                 update_time=comment.update_time,
             )
-    
-    
+
+def get_post_adding_user_name(post: Post)->Post:
+    new_post = post.deepcopy()
+    new_post.user_name = get_user(int(post.user_id)).name
+    return new_post
 
 if __name__ == '__main__':
     app.run(debug=True)
