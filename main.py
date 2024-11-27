@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect, url_for,request
+from flask import Flask, render_template, redirect, url_for,request, make_response
 from datetime import datetime
 from dataclasses import dataclass
 from copy import deepcopy
+from math import ceil
 import typing
 
 app = Flask(__name__)
@@ -106,7 +107,7 @@ def create_comment():
 
 @app.route('/')
 def index():
-    return redirect(url_for("get_post_list"))
+    return redirect(url_for("get_post_list", page=1))
 
 @app.route('/post/<int:post_id>', methods=['GET'])
 def get_post_detail(post_id:int):
@@ -124,11 +125,20 @@ def get_post_edit(post_id:int):
 def get_post_create():
     return render_template('post_create.html')
 
-@app.route('/post', methods=['GET'])
-def get_post_list():
-    post_list = posts.values()
-    converted_posts = [get_post_adding_user_name(post) for post in post_list]
-    return render_template('post_list.html', posts=converted_posts)
+@app.route('/post/list/<int:page>', methods=['GET'])
+def get_post_list(page:int): # page 1~end
+    size = 2
+    max_page = ceil(len(posts) / size)
+    page = min(max_page, max(page-1,0))
+    start_idx = 0
+    end_idx = min(2,  len(posts))
+    new_posts = get_slice_post(start_idx, end_idx)
+    converted_posts = [get_post_adding_user_name(post) for post in new_posts]
+    if len(new_posts) == 0:
+        return redirect(url_for("get_post_list", page=page))
+        # return make_response('더이상 페이지가 없습니다.', 404)
+    else :
+        return render_template('post_list.html', posts=converted_posts, page=page+1)
 
 @app.route('/post/create', methods=['POST'])
 def create_post():
@@ -188,6 +198,9 @@ def get_post_adding_user_name(post: Post)->Post:
     new_post = post.deepcopy()
     new_post.user_name = get_user(int(post.user_id)).name
     return new_post
+    
+def get_slice_post(start_idx:int, end_idx:int) -> typing.List[Post] :
+    return list(posts.values())
 
 if __name__ == '__main__':
     app.run(debug=True)
