@@ -99,7 +99,7 @@ def create_comment():
     )
     comments[comment_id] = new_comment
     print(comments)
-    return redirect(url_for("index"))
+    return redirect(url_for("get_post_detail",post_id = post_id))
 
 @app.route('/')
 def index():
@@ -109,7 +109,7 @@ def index():
 def get_post_detail(post_id:int):
     post = posts[post_id]
     new_comment = get_comment_list(post_id)
-    post.user_name = get_user(post.user_id).name
+    post.user_name = get_user(int(post.user_id)).name
     return render_template('post_detail.html', post=post, comments=new_comment)
 
 @app.route('/post/edit/<int:post_id>', methods=['GET'])
