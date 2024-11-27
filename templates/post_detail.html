@@ -47,7 +47,7 @@
                         </small>
                 
                         <!-- 삭제 버튼 -->
-                        <form action="" method="GET" style="display:inline;">
+                        <form action="/comment/delete/{{comment.id}}" method="GET" style="display:inline;">
                             <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');">
                                 <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px; object-fit: cover;">
                             </button>

@@ -162,6 +162,13 @@ def delete_post(post_id):
     del posts[post_id]
     return redirect(url_for("index"))
 
+@app.route('/comment/delete/<int:comment_id>', methods=['GET'])
+def delete_comment(comment_id):
+    post_id = comments[comment_id].post_id
+    del comments[comment_id]
+
+    return redirect(url_for('get_post_detail', post_id = post_id))
+
 def get_comment_list(post_id:int)-> typing.List[CommentDto]:
     # return convert_to_comment_dto(comments)
     # 아래를 구현하시오
