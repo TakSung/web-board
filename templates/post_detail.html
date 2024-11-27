@@ -18,16 +18,14 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-3">
-                <span class="badge bg-primary text-light me-2">작성자<{{ post.user_id }}></span>
+                <span class="badge bg-primary text-light me-2">작성자<{{ post.user_name }}></span>
                 <span class="badge bg-primary text-light">{{ post.create_time.strftime('%Y/%m/%d') }}</span>
             </div>
             <div class="d-flex justify-content-end mt-2">
                 <span class="badge bg-primary text-light">수정 시간: {{ post.update_time.strftime('%Y/%m/%d') }}</span>
             </div>
         </div>
-
-        <a href="" class="btn btn-primary">게시글 수정하기</a>
-
+        <a href="{{url_for('get_post_edit', post_id=post.id)}}" class="btn btn-primary">게시글 수정하기</a>
         <!-- 댓글 목록 -->
         <h3 class="mt-5 mb-4 text-primary">댓글</h3>
         <div class="list-group mb-4">
@@ -36,20 +34,18 @@
                 <!-- 댓글 내용 -->
                 <p class="mb-1">{{ comment.content }}</p>
                 
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <!-- 작성자 정보 및 삭제 버튼 -->
-                    <div class="d-flex justify-content-between w-100">
-                        <small class="text-muted">
-                            작성자: {{ comment.user }} | 작성일: {{ comment.create_time.strftime('%Y/%m/%d') }}
-                        </small>
-                
-                        <!-- 삭제 버튼 -->
-                        <form action="" method="GET" style="display:inline;">
-                            <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');">
-                                <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px; object-fit: cover;">
-                            </button>
-                        </form>
-                    </div>
+                <!-- 작성자 정보 및 삭제 버튼 -->
+                <div class="d-flex justify-content-between align-items-center" style="margin: 0; padding: 0; border: none;">
+                    <small class="text-muted">
+                        작성자: {{ comment.user }} | 작성일: {{ comment.create_time.strftime('%Y/%m/%d') }}
+                    </small>
+
+                    <!-- 삭제 버튼 -->
+                    <form action="" method="GET" style="display:inline; margin: 0;">
+                        <button type="submit" class="btn btn-link p-0" onclick="return confirm('정말 삭제하시겠습니까?');" style="margin: 0;">
+                            <img src="{{ url_for('static', filename='delete.svg') }}" alt="삭제" style="width: 20px; height: 20px; object-fit: cover;">
+                        </button>
+                    </form>
                 </div>
             </div>
         {% endfor %}

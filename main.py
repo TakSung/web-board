@@ -7,21 +7,13 @@ import typing
 
 app = Flask(__name__)
 
-# class Post:
-#     def __init__(self, post_id, title, content, user_id):
-#         self.post_id = post_id
-#         self.title = title
-#         self.content = content
-#         self.create_time = datetime.now()
-#         self.update_time = datetime.now()
-#         self.user_id = user_id
-
 @dataclass
 class Post:
     id:int
     title:str
     content:str
-    user_id:str
+    user_id:int
+    user_name:str = ""
     create_time:datetime = datetime.now()
     update_time:datetime = datetime.now()
     
@@ -63,6 +55,12 @@ posts = {
 users = {
     1: User(id=1, account="test1", name="정우성", pw="123"),
     2: User(id=2, account="test2", name="이탁균", pw="456"),
+    3: User(id=3, account="test3", name="김상철", pw="234"),
+    4: User(id=4, account="test4", name="류교자", pw="567"),
+    5: User(id=5, account="test5", name="정상우", pw="789"),
+    6: User(id=6, account="test6", name="김박사", pw="135"),
+    7: User(id=7, account="test7", name="우울지", pw="246"),
+    8: User(id=8, account="test8", name="사악한", pw="357"),
 }
 
 comments = {
@@ -85,6 +83,7 @@ def index():
 @app.route('/post/<int:post_id>', methods=['GET'])
 def get_post_detail(post_id:int):
     post = posts[post_id]
+    post.user_name = get_user(post.user_id).account
     new_comment = get_comment_list(post_id)
     return render_template('post_detail.html', post=post, comments=new_comment)
 
@@ -135,7 +134,7 @@ def edit_post():
     user_id = request.form['user_id']
     new_post = Post(post_id, title, content,user_id)
     posts[post_id] = new_post
-    return redirect(url_for("index"))
+    return redirect(url_for("get_post_detail", post_id=post_id))
 
 @app.route('/post/delete/<int:post_id>', methods=['GET'])
 def delete_post(post_id):
