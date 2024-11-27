@@ -127,12 +127,12 @@ def get_post_create():
 
 @app.route('/post/list/<int:page>', methods=['GET'])
 def get_post_list(page:int): # page 1~end
-    size = 2
+    size = 3
     max_page = ceil(len(posts) / size)
     page = min(max_page, max(page-1,0))
-    start_idx = 0
-    end_idx = min(2,  len(posts))
-    new_posts = get_slice_post(start_idx, end_idx)
+    start_idx = page * size
+    end_idx = (page+1) * size
+    new_posts = list(posts.values())[start_idx:end_idx]
     converted_posts = [get_post_adding_user_name(post) for post in new_posts]
     if len(new_posts) == 0:
         return redirect(url_for("get_post_list", page=page))
