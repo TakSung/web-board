@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for,request, make_response
+from flask import Flask, render_template, redirect, url_for,request
 from datetime import datetime
 from dataclasses import dataclass
 from copy import deepcopy
@@ -127,16 +127,12 @@ def get_post_create():
 
 @app.route('/post/list/<int:page>', methods=['GET'])
 def get_post_list(page:int): # page 1~end
-    size = 2
-    max_page = ceil(len(posts) / size)
-    page = min(max_page, max(page-1,0))
-    start_idx = 0
-    end_idx = min(2,  len(posts))
-    new_posts = get_slice_post(start_idx, end_idx)
+    size = 3
+    page = get_page(page, size)
+    new_posts = get_slice_post(page, size)
     converted_posts = [get_post_adding_user_name(post) for post in new_posts]
     if len(new_posts) == 0:
         return redirect(url_for("get_post_list", page=page))
-        # return make_response('더이상 페이지가 없습니다.', 404)
     else :
         return render_template('post_list.html', posts=converted_posts, page=page+1)
 
@@ -205,9 +201,15 @@ def get_post_adding_user_name(post: Post)->Post:
     new_post = post.deepcopy()
     new_post.user_name = get_user(int(post.user_id)).name
     return new_post
-    
-def get_slice_post(start_idx:int, end_idx:int) -> typing.List[Post] :
-    return list(posts.values())
+
+def get_page(page, size:int) -> int:
+    max_page = ceil(len(posts) / size)
+    return min(max_page, max(page-1,0))
+
+def get_slice_post(page:int, size:int) -> typing.List[Post] :
+    start_idx = page * size
+    end_idx = min(start_idx+size,  len(posts))
+    return list(reversed(posts.values()))[start_idx:end_idx]
 
 if __name__ == '__main__':
     app.run(debug=True)
