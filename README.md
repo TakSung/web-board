@@ -16,7 +16,7 @@ pip install -r requirements.txt
 pip install -r requirements.txt
 ```
 
-# 과거 커밋부터 확인하기
+# 처음부터 하나씩 올라가며 공부하기
 
 ### 원하는 커밋 히스토리 찾기
 ```bash
@@ -24,7 +24,7 @@ git log --oneline
 ```
 - 그중에 원하는 커밋 히스토리의 해시값 복사
 
-### 처음부터 하나씩 올라가며 공부하기
+### 과거 커밋으로 돌아가기
 ```bash
 # 원하는 시점으로 이동
 git checkout 76b00d2 # 76b00d2는 해시값으로 다른 값으로 대치가능
